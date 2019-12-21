@@ -1,26 +1,18 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "Inputs.h"
+#include "MovingCircle.h"
+#include "Projectile.h"
 
-using namespace sf;
-
-class Character
+class Character : public MovingCircle
 {
-  Vector2f position;
-  CircleShape characterShape;
-  float characterSpeed;
-
+  float m_weaponCooldown;
+  float m_timeSinceLastShot;
+  Projectiles m_projectiles;
 public:
   Character(float xPos, float yPos, float size);
-
-  FloatRect getRect();
-
-  CircleShape getShape();
-
-  void moveLeft(float time);
-  void moveRight(float time);
-  void moveUp(float time);
-  void moveDown(float time);
-
-  void update();
+  void MoveIfInput(const KeyboardInputs& inputs, float timeElapsed);
+  void ShootIfInput(const KeyboardInputs& inputs, float timeElapsed);
+  void DrawAll(sf::RenderWindow& window);
 };

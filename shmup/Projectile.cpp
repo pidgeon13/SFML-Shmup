@@ -1,43 +1,29 @@
 #include "Projectile.h"
-#include <cmath>
 
-Projectile::Projectile(float xPos, float yPos, float size, float xComponent, float yComponent) :
-  shape(size)
+Projectile::Projectile(float xPos, float yPos, float size, float speed, float xComponent, float yComponent, float damage) :
+  MovingCircle(xPos, yPos, size, speed, xComponent, yComponent),
+  m_damage(damage)
 {
-  position.x = xPos;
-  position.y = yPos;
-  float divisor = sqrt(std::pow(xComponent, 2) + std::pow(yComponent, 2));
-  direction.x = xComponent / divisor;
-  direction.y = yComponent / divisor;
 }
 
-Projectile::Projectile(float xPos, float yPos, float size, cardinal cardinalIn)
+void Projectiles::MoveAndUpdateAll(float timeElapsed)
 {
-  position.x = xPos;
-  position.y = yPos;
-  switch(cardinalIn)
+  for (auto itr = m_storage.begin(); itr != m_storage.end(); ++itr)
   {
-  case cardinal::E:
-    direction.x = 1;
-    direction.y = 0;
-  case cardinal::W:
-    direction.x = -1;
-    direction.y = 0;
-  case cardinal::N:
-    direction.x = 0;
-    direction.y = -1;
-  case cardinal::S:
-    direction.x = 0;
-    direction.y = 1;
+    itr->Move(timeElapsed);
+    itr->Update();
   }
 }
 
-FloatRect Projectile::getRect()
+void Projectiles::Add(const Projectile& newProjectile)
 {
-  return shape.getGlobalBounds();
+  m_storage.push_back(newProjectile);
 }
 
-CircleShape Projectile::getShape()
+void Projectiles::DrawAll(sf::RenderWindow & window)
 {
-  return shape;
+  for (auto itr = m_storage.begin(); itr != m_storage.end(); ++itr)
+  {
+    itr->Draw(window);
+  }
 }

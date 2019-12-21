@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <SFML/Graphics.hpp>
 #include "Character.h"
+#include <set>
+#include "Inputs.h"
 
 using namespace sf;
 
@@ -31,6 +33,7 @@ int main()
   FloatRect pauseRect = pause.getLocalBounds();
   pause.setOrigin(pauseRect.width / 2, pauseRect.height / 2);
 	pause.setPosition(windowWidth / 2.0f, windowHeight / 2.0f);
+  KeyboardInputs previousInputs;
   while (window.isOpen())
   {
     float elapsedTime = clock.getElapsedTime().asSeconds();
@@ -52,24 +55,13 @@ int main()
     }
     if (!isPaused)
     {
-      if (Keyboard::isKeyPressed(Keyboard::Left))
-      {
-        player.moveLeft(elapsedTime);
-      }
-      if (Keyboard::isKeyPressed(Keyboard::Right))
-      {
-        player.moveRight(elapsedTime);
-      }
-      if (Keyboard::isKeyPressed(Keyboard::Up))
-      {
-        player.moveUp(elapsedTime);
-      }
-      if (Keyboard::isKeyPressed(Keyboard::Down))
-      {
-        player.moveDown(elapsedTime);
-      }
+      KeyboardInputs currentInputs;
+      currentInputs.SetToCurrentInputs();
+      player.MoveIfInput(currentInputs, elapsedTime);
+      player.ShootIfInput(currentInputs, elapsedTime);
+      previousInputs = currentInputs;
     }
-    player.update();
+    player.Update();
     // Update the HUD text
     std::stringstream ss;
     ss << "Score:" << score << "    Lives:" << lives;
@@ -83,7 +75,8 @@ int main()
       window.draw(pause);
     }
 
-    window.draw(player.getShape());
+    player.DrawAll(window);
+
     // Draw our score
     window.draw(hud);
 

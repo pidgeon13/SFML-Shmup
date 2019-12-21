@@ -1,44 +1,88 @@
 #include "Character.h"
+#include "Geometry.h"
 
 Character::Character(float xPos, float yPos, float size) :
-  characterShape(size)
+  MovingCircle(xPos, yPos, size, 200.0f, 0.0f, 0.0f),
+  m_weaponCooldown(0.25f)
 {
-  position.x = xPos;
-  position.y = yPos;
-  characterSpeed = 200.0f;
+  m_timeSinceLastShot = m_weaponCooldown;
 }
 
-FloatRect Character::getRect()
+void Character::MoveIfInput(const KeyboardInputs& inputs, float timeElapsed)
 {
-  return characterShape.getGlobalBounds();
+  sf::Vector2f newDirection(0.0f, 0.0f);
+  if (inputs.Contains(sf::Keyboard::Up) != inputs.Contains(sf::Keyboard::Down))
+  {
+    //We must be moving either up or down.
+    if (inputs.Contains(sf::Keyboard::Up))
+    {
+      newDirection.y = -1;
+    }
+    else
+    {
+      newDirection.y = 1;
+    }
+  }
+  if (inputs.Contains(sf::Keyboard::Left) != inputs.Contains(sf::Keyboard::Right))
+  {
+    //We must be either moving left or right.
+    if (inputs.Contains(sf::Keyboard::Left))
+    {
+      newDirection.x = -1;
+    }
+    else
+    {
+      newDirection.x = 1;
+    }
+  }
+  SetDirection(newDirection);
+  Move(timeElapsed);
 }
 
-CircleShape Character::getShape()
+void Character::ShootIfInput(const KeyboardInputs& inputs, float timeElapsed)
 {
-  return characterShape;
+  m_timeSinceLastShot += timeElapsed;
+  if (m_timeSinceLastShot >= m_weaponCooldown)
+  {
+    sf::Vector2f weaponDirection(0.0f, 0.0f);
+    //We can shoot.
+    if (inputs.Contains(sf::Keyboard::W) != inputs.Contains(sf::Keyboard::S))
+    {
+      //We must be moving either up or down.
+      if (inputs.Contains(sf::Keyboard::W))
+      {
+        weaponDirection.y = -1;
+      }
+      else
+      {
+        weaponDirection.y = 1;
+      }
+    }
+    if (inputs.Contains(sf::Keyboard::A) != inputs.Contains(sf::Keyboard::D))
+    {
+      //We must be either moving left or right.
+      if (inputs.Contains(sf::Keyboard::A))
+      {
+        weaponDirection.x = -1;
+      }
+      else
+      {
+        weaponDirection.x = 1;
+      }
+    }
+    if (!Geometry::IsZero(weaponDirection))
+    {
+      Geometry::Normalise(weaponDirection);
+      Projectile newProjectile(m_position.x, m_position.y, 5.0f, 600.0f, weaponDirection.x, weaponDirection.y, 5.0f);
+      m_projectiles.Add(newProjectile);
+      m_timeSinceLastShot = 0.0f;
+    }
+  }
+  m_projectiles.MoveAndUpdateAll(timeElapsed);
 }
 
-void Character::moveLeft(float time)
+void Character::DrawAll(sf::RenderWindow& window)
 {
-  position.x -= characterSpeed*time;
-}
-
-void Character::moveRight(float time)
-{
-  position.x += characterSpeed * time;
-}
-
-void Character::moveUp(float time)
-{
-  position.y -= characterSpeed * time;
-}
-
-void Character::moveDown(float time)
-{
-  position.y += characterSpeed * time;
-}
-
-void Character::update()
-{
-  characterShape.setPosition(position);
+  Draw(window);
+  m_projectiles.DrawAll(window);
 }
