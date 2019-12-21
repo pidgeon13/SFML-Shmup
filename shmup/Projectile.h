@@ -1,27 +1,25 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "MovingCircle.h"
+#include <list>
 
 using namespace sf;
 
-class Projectile
+class Projectile : public MovingCircle
 {
-  const enum cardinal{
-    N,
-    S,
-    E,
-    W,
-  };
-  Vector2f position;
-  CircleShape shape;
-  Vector2f direction;
-  float speed;
+  float m_damage;
 
 public:
-  Projectile(float xPos, float yPos, float size, float xComponent, float yComponent);
-  Projectile(float xPos, float yPos, float size, cardinal direction);
-  
-  FloatRect getRect();
+  Projectile(float xPos, float yPos, float size, float speed, float xComponent, float yComponent, float damage);
+};
 
-  CircleShape getShape();
+class Projectiles
+{
+  std::list<Projectile> m_storage;
+
+public:
+  void MoveAndUpdateAll(float timeElapsed);
+  void Add(const Projectile& newProjectile);
+  void DrawAll(sf::RenderWindow& window);
 };
