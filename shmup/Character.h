@@ -9,10 +9,19 @@ class Character : public MovingCircle
 {
   float m_weaponCooldown;
   float m_timeSinceLastShot;
-  Projectiles m_projectiles;
+  const int m_maxHealth;
+  int m_health;
+  float m_damageGracePeriod;
+  float m_timeSinceDamaged;
+  sf::Color m_originalColor;
+
 public:
-  Character(float xPos, float yPos, float size);
+  Character(float xPos, float yPos, float size, int health, const sf::Color& color);
+  void UpdateTimeElapsedForCooldowns(float timeElapsed);
   void MoveIfInput(const KeyboardInputs& inputs, float timeElapsed);
-  void ShootIfInput(const KeyboardInputs& inputs, float timeElapsed);
-  void DrawAll(sf::RenderWindow& window);
+  void ShootIfInput(const KeyboardInputs& inputs, float timeElapsed, Projectiles& projectiles);
+  int GetHealth() const;
+  void SetGracePeriod(float gracePeriod);
+  bool TakeDamage(int damage);
+  void UpdateColor();
 };

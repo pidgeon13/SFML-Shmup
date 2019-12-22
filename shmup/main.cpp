@@ -14,10 +14,16 @@ int main()
   RenderWindow window(VideoMode(windowWidth, windowHeight), "Pong");
 
   int score = 0;
-  int lives = 3;
   bool isPaused = false;
 
-  Character player(windowWidth / 2.0f, windowHeight / 2.0f, 20);
+  Character player(windowWidth / 2.0f, windowHeight / 2.0f, 20, 50, sf::Color::Cyan);
+  player.SetGracePeriod(0.5f);
+
+  Character enemy(0, windowHeight / 2.0f, 40, 100, sf::Color::Red);
+  enemy.SetSpeed(120.0f);
+  enemy.SetAlignment(MovingCircle::Alignment::BAD);
+
+  Projectiles allProjectiles;
   Clock clock;
   Text hud;
 
@@ -55,27 +61,47 @@ int main()
     }
     if (!isPaused)
     {
+      //Do actual game stuff
+
+      //player stuff
       KeyboardInputs currentInputs;
       currentInputs.SetToCurrentInputs();
+      player.UpdateTimeElapsedForCooldowns(elapsedTime);
       player.MoveIfInput(currentInputs, elapsedTime);
-      player.ShootIfInput(currentInputs, elapsedTime);
+      player.ShootIfInput(currentInputs, elapsedTime, allProjectiles);
       previousInputs = currentInputs;
+
+      //enemy stuff
+      Vector2f enemyMovement = player.GetPosition() - enemy.GetPosition();
+      enemy.SetDirection(enemyMovement);
+      enemy.Move(elapsedTime);
+
+      //Projectiles
+      allProjectiles.MoveAll(elapsedTime);
+
+      //Collisions
+      if (enemy.Hits(player))
+      {
+        player.TakeDamage(10);
+      }
+      allProjectiles.Hits(enemy);
     }
-    player.Update();
     // Update the HUD text
     std::stringstream ss;
-    ss << "Score:" << score << "    Lives:" << lives;
+    ss << "Score:" << score << "    Health:" << player.GetHealth();
     hud.setString(ss.str());
 
     //Draw//
     window.clear(Color(0, 0, 50, 255));
 
+    player.Draw(window);
+    enemy.Draw(window);
+    allProjectiles.DrawAll(window);
+
     if (isPaused)
     {
       window.draw(pause);
     }
-
-    player.DrawAll(window);
 
     // Draw our score
     window.draw(hud);

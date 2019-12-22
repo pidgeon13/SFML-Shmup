@@ -1,18 +1,22 @@
 #include "MovingCircle.h"
 #include "Geometry.h"
+#include <assert.h>
 
 MovingCircle::MovingCircle()
 {
   MovingCircle(0.0f, 0.0f, 5.0f, 10.0f, 0.0f, 0.0f);
 }
 
-MovingCircle::MovingCircle(float xPos, float yPos, float size, float speed, float xComponent, float yComponent) :
-  m_shape(size),
+MovingCircle::MovingCircle(float xPos, float yPos, float radius, float speed, float xComponent, float yComponent) :
+  m_shape(radius),
   m_position(xPos, yPos),
   m_direction(xComponent, yComponent),
-  m_speed(speed)
+  m_speed(speed),
+  m_alignment(Alignment::GOOD)
 {
+  m_shape.setOrigin(radius, radius);
   Geometry::Normalise(m_direction);
+  Update();
 }
 
 sf::FloatRect MovingCircle::GetRect() const
@@ -25,21 +29,57 @@ sf::CircleShape MovingCircle::GetShape() const
   return m_shape;
 }
 
+sf::Vector2f MovingCircle::GetPosition() const
+{
+  return m_position;
+}
+
+void MovingCircle::SetColor(const sf::Color& color)
+{
+  m_shape.setFillColor(color);
+}
+
+void MovingCircle::SetSpeed(float speed)
+{
+  m_speed = speed;
+}
+
 void MovingCircle::SetDirection(const sf::Vector2f& directionIn)
 {
   m_direction = directionIn;
   Geometry::Normalise(m_direction);
 }
 
+void MovingCircle::SetAlignment(Alignment alignment)
+{
+  m_alignment = alignment;
+}
+
+MovingCircle::Alignment MovingCircle::GetAlignment() const
+{
+  return m_alignment;
+}
+
 void MovingCircle::Move(float time)
 {
+  assert(Geometry::IsEqual(Geometry::Length2(m_direction), 1)
+    || Geometry::IsEqual(Geometry::Length2(m_direction), 0));
   m_position.x += m_direction.x * m_speed * time;
   m_position.y += m_direction.y * m_speed * time;
+  Update();
 }
 
 void MovingCircle::Draw(sf::RenderWindow& window)
 {
   window.draw(m_shape);
+}
+
+bool MovingCircle::Hits(const MovingCircle & other)
+{
+  float radius = m_shape.getRadius();
+  float otherRadius = other.GetShape().getRadius();
+  float distance2 = Geometry::Length2(m_position - other.GetPosition());
+  return distance2 < std::pow(radius + otherRadius, 2);
 }
 
 void MovingCircle::Update()
