@@ -61,7 +61,6 @@ int main()
       player.ShootIfInput(currentInputs, elapsedTime);
       previousInputs = currentInputs;
     }
-    player.Update();
     // Update the HUD text
     std::stringstream ss;
     ss << "Score:" << score << "    Lives:" << lives;

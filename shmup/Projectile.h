@@ -19,7 +19,7 @@ class Projectiles
   std::list<Projectile> m_storage;
 
 public:
-  void MoveAndUpdateAll(float timeElapsed);
+  void MoveAll(float timeElapsed);
   void Add(const Projectile& newProjectile);
   void DrawAll(sf::RenderWindow& window);
 };

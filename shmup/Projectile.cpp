@@ -6,12 +6,11 @@ Projectile::Projectile(float xPos, float yPos, float size, float speed, float xC
 {
 }
 
-void Projectiles::MoveAndUpdateAll(float timeElapsed)
+void Projectiles::MoveAll(float timeElapsed)
 {
   for (auto itr = m_storage.begin(); itr != m_storage.end(); ++itr)
   {
     itr->Move(timeElapsed);
-    itr->Update();
   }
 }
 

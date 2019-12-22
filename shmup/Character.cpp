@@ -78,7 +78,7 @@ void Character::ShootIfInput(const KeyboardInputs& inputs, float timeElapsed)
       m_timeSinceLastShot = 0.0f;
     }
   }
-  m_projectiles.MoveAndUpdateAll(timeElapsed);
+  m_projectiles.MoveAll(timeElapsed);
 }
 
 void Character::DrawAll(sf::RenderWindow& window)

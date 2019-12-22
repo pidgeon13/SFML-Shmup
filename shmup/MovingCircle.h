@@ -16,6 +16,8 @@ public:
   MovingCircle(float xPos, float yPos, float size, float speed, float xComponent, float yComponent);
   sf::FloatRect GetRect() const;
   sf::CircleShape GetShape() const;
+  sf::Vector2f GetPosition() const;
+  void SetColor(const sf::Color& color);
   void SetDirection(const sf::Vector2f& directionIn);
   void Move(float time);
   void Draw(sf::RenderWindow& window);
