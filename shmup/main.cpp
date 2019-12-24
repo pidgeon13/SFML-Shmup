@@ -4,6 +4,7 @@
 #include "Character.h"
 #include <set>
 #include "Inputs.h"
+#include "ListContainer.hpp"
 
 using namespace sf;
 
@@ -13,17 +14,16 @@ int main()
   int windowHeight = 768;
   RenderWindow window(VideoMode(windowWidth, windowHeight), "Pong");
 
-  int score = 0;
+  size_t score = 0;
   bool isPaused = false;
 
-  Character player(windowWidth / 2.0f, windowHeight / 2.0f, 20, 50, sf::Color::Cyan);
+  Character player(windowWidth / 2.0f, windowHeight / 2.0f, 20, 50, sf::Color::Cyan, 0);
   player.SetGracePeriod(0.5f);
 
-  Character enemy(0, windowHeight / 2.0f, 40, 100, sf::Color::Red);
-  enemy.SetSpeed(120.0f);
-  enemy.SetAlignment(MovingCircle::Alignment::BAD);
 
-  Projectiles allProjectiles;
+  ListContainer<Character> allEnemies;
+
+  ListContainer<MovingCircle> allProjectiles;
   Clock clock;
   Text hud;
 
@@ -72,19 +72,34 @@ int main()
       previousInputs = currentInputs;
 
       //enemy stuff
-      Vector2f enemyMovement = player.GetPosition() - enemy.GetPosition();
-      enemy.SetDirection(enemyMovement);
-      enemy.Move(elapsedTime);
+      allEnemies.MoveAllTowardsCharacter(elapsedTime, player);
 
       //Projectiles
       allProjectiles.MoveAll(elapsedTime);
 
       //Collisions
-      if (enemy.Hits(player))
+      allEnemies.Hits(player, false);
+      for (auto itr = allEnemies.m_storage.begin(); itr != allEnemies.m_storage.end(); ++itr)
       {
-        player.TakeDamage(10);
+        Character& enemy = *itr;
+        allProjectiles.Hits(enemy);
+        if (enemy.GetHealth() == 0)
+        {
+          ++score;
+          enemy.SetCanRemove(true);
+        }
       }
-      allProjectiles.Hits(enemy);
+      auto it = std::remove_if(allEnemies.m_storage.begin(), allEnemies.m_storage.end(), [](MovingCircle x) {return x.GetCanRemove(); });
+      allEnemies.m_storage.erase(it, allEnemies.m_storage.end());
+
+      while (allEnemies.GetSize() < score + 1)
+      {
+      //Create enemies if needed
+      Character enemy(0, allEnemies.GetSize()*windowHeight / static_cast<float>(score + 1), 40, 100, sf::Color::Red, 10);
+      enemy.SetSpeed(120.0f);
+      enemy.SetAlignment(MovingCircle::Alignment::BAD);
+      allEnemies.Add(enemy);
+      }
     }
     // Update the HUD text
     std::stringstream ss;
@@ -95,7 +110,7 @@ int main()
     window.clear(Color(0, 0, 50, 255));
 
     player.Draw(window);
-    enemy.Draw(window);
+    allEnemies.DrawAll(window);
     allProjectiles.DrawAll(window);
 
     if (isPaused)
