@@ -4,15 +4,17 @@
 
 MovingCircle::MovingCircle()
 {
-  MovingCircle(0.0f, 0.0f, 5.0f, 10.0f, 0.0f, 0.0f);
+  MovingCircle(0.0f, 0.0f, 5.0f, 10.0f, 0.0f, 0.0f, 0);
 }
 
-MovingCircle::MovingCircle(float xPos, float yPos, float radius, float speed, float xComponent, float yComponent) :
+MovingCircle::MovingCircle(float xPos, float yPos, float radius, float speed, float xComponent, float yComponent,int damage) :
   m_shape(radius),
   m_position(xPos, yPos),
   m_direction(xComponent, yComponent),
   m_speed(speed),
-  m_alignment(Alignment::GOOD)
+  m_alignment(Alignment::GOOD),
+  m_canRemove(false),
+  m_damage(damage)
 {
   m_shape.setOrigin(radius, radius);
   Geometry::Normalise(m_direction);
@@ -69,9 +71,24 @@ void MovingCircle::Move(float time)
   Update();
 }
 
-void MovingCircle::Draw(sf::RenderWindow& window)
+void MovingCircle::Draw(sf::RenderWindow& window) const
 {
   window.draw(m_shape);
+}
+
+void MovingCircle::SetCanRemove(bool canRemove)
+{
+  m_canRemove = canRemove;
+}
+
+bool MovingCircle::GetCanRemove() const
+{
+  return m_canRemove;
+}
+
+int MovingCircle::GetDamage() const
+{
+  return m_damage;
 }
 
 bool MovingCircle::Hits(const MovingCircle & other)

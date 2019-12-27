@@ -1,8 +1,21 @@
 #include "Character.h"
 #include "Geometry.h"
+#include "ListContainer.hpp"
 
-Character::Character(float xPos, float yPos, float radius, int health, const sf::Color& color) :
-  MovingCircle(xPos, yPos, radius, 200.0f, 0.0f, 0.0f),
+Character::Character() :
+  MovingCircle(),
+  m_weaponCooldown(0.0f),
+  m_maxHealth(0),
+  m_originalColor(sf::Color::White),
+  m_damageGracePeriod(0.0f),
+  m_timeSinceDamaged(0.0f)
+{
+  m_health = m_maxHealth;
+  m_timeSinceLastShot = m_weaponCooldown;
+}
+
+Character::Character(float xPos, float yPos, float radius, int health, const sf::Color& color, int damage) :
+  MovingCircle(xPos, yPos, radius, 200.0f, 0.0f, 0.0f, damage),
   m_weaponCooldown(0.25f),
   m_maxHealth(health),
   m_originalColor(color),
@@ -51,7 +64,7 @@ void Character::MoveIfInput(const KeyboardInputs& inputs, float timeElapsed)
   Move(timeElapsed);
 }
 
-void Character::ShootIfInput(const KeyboardInputs& inputs, float timeElapsed, Projectiles& projectiles)
+void Character::ShootIfInput(const KeyboardInputs& inputs, float timeElapsed, ListContainer<MovingCircle>& projectiles)
 {
   
   if (m_timeSinceLastShot >= m_weaponCooldown)
@@ -85,7 +98,7 @@ void Character::ShootIfInput(const KeyboardInputs& inputs, float timeElapsed, Pr
     if (!Geometry::IsZero(weaponDirection))
     {
       Geometry::Normalise(weaponDirection);
-      Projectile newProjectile(m_position.x, m_position.y, 5.0f, 600.0f, weaponDirection.x, weaponDirection.y, 5);
+      MovingCircle newProjectile(m_position.x, m_position.y, 5.0f, 600.0f, weaponDirection.x, weaponDirection.y, 5);
       projectiles.Add(newProjectile);
       m_timeSinceLastShot = 0.0f;
     }
