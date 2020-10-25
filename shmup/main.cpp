@@ -5,6 +5,7 @@
 #include <set>
 #include "Inputs.h"
 #include "ListContainer.hpp"
+#include <string>
 
 using namespace sf;
 
