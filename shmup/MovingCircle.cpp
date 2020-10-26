@@ -91,7 +91,7 @@ int MovingCircle::GetDamage() const
   return m_damage;
 }
 
-bool MovingCircle::Hits(const MovingCircle & other)
+bool MovingCircle::Hits(const MovingCircle& other)
 {
   float radius = m_shape.getRadius();
   float otherRadius = other.GetShape().getRadius();
