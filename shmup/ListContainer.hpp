@@ -57,11 +57,17 @@ inline bool ListContainer<T>::Hits(Character& character, bool removeThoseHit)
   }
   if (someHits && removeThoseHit)
   {
-    auto it = std::remove_if(m_storage.begin(), m_storage.end(), [](MovingCircle x) {return x.GetCanRemove(); });
-    m_storage.erase(it, m_storage.end());
+    RemoveUnecessaryMembers();
   }
 
   return someHits;
+}
+
+template<class T>
+inline void ListContainer<T>::RemoveUnecessaryMembers()
+{
+  auto it = std::remove_if(m_storage.begin(), m_storage.end(), [](MovingCircle x) {return x.GetCanRemove(); });
+  m_storage.erase(it, m_storage.end());
 }
 
 template<class T>

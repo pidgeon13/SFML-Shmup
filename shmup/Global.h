@@ -1,5 +1,5 @@
 #pragma once
-class State
+class Global
 {
 public:
   const static int windowWidth;

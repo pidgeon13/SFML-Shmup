@@ -1,6 +1,7 @@
 #include "MovingCircle.h"
 #include "Geometry.h"
 #include <assert.h>
+#include "Global.h"
 
 MovingCircle::MovingCircle()
 {
@@ -14,7 +15,8 @@ MovingCircle::MovingCircle(float xPos, float yPos, float radius, float speed, fl
   m_speed(speed),
   m_alignment(Alignment::GOOD),
   m_canRemove(false),
-  m_damage(damage)
+  m_damage(damage),
+  m_removeWhenHittingWall(true)
 {
   m_shape.setOrigin(radius, radius);
   Geometry::Normalise(m_direction);
@@ -26,7 +28,7 @@ sf::FloatRect MovingCircle::GetRect() const
   return m_shape.getGlobalBounds();
 }
 
-sf::CircleShape MovingCircle::GetShape() const
+const sf::CircleShape& MovingCircle::GetShape() const
 {
   return m_shape;
 }
@@ -66,8 +68,29 @@ void MovingCircle::Move(float time)
 {
   assert(Geometry::IsEqual(Geometry::Length2(m_direction), 1)
     || Geometry::IsEqual(Geometry::Length2(m_direction), 0));
-  m_position.x += m_direction.x * m_speed * time;
-  m_position.y += m_direction.y * m_speed * time;
+  float newX = m_position.x + m_direction.x * m_speed * time;
+  float newY = m_position.y + m_direction.y * m_speed * time;
+  float maxX = Global::windowWidth - m_shape.getRadius();
+  float maxY = Global::windowHeight - m_shape.getRadius();
+  float minX = m_shape.getRadius();
+  float minY = m_shape.getRadius();
+  if (newX < minX
+    || newX > maxX
+    || newY < minY
+    || newY > maxY)
+  {
+    if (m_removeWhenHittingWall)
+    {
+      m_canRemove = true;
+    }
+    else
+    {
+      newX = std::min(std::max(newX, minX), maxX);
+      newY = std::min(std::max(newY, minY), maxY);
+    }
+  }
+  m_position.x = newX;
+  m_position.y = newY;
   Update();
 }
 

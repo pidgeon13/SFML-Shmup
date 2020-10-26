@@ -25,6 +25,7 @@ Character::Character(float xPos, float yPos, float radius, int health, const sf:
   SetColor(color);
   m_health = m_maxHealth;
   m_timeSinceLastShot = m_weaponCooldown;
+  m_removeWhenHittingWall = false;
 }
 
 void Character::UpdateTimeElapsedForCooldowns(float timeElapsed)

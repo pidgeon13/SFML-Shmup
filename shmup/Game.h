@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Character.h"
-#include "State.h"
+#include "Global.h"
 #include "ListContainer.hpp"
 #include <SFML/Graphics.hpp>
 #include "Inputs.h"

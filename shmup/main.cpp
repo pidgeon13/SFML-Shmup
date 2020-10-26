@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "State.h"
+#include "Global.h"
 
 using namespace sf;
 

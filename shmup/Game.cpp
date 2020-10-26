@@ -59,13 +59,13 @@ void Game::DoGameLogic(float elapsedTime)
       enemy.SetCanRemove(true);
     }
   }
-  auto it = std::remove_if(m_enemies.m_storage.begin(), m_enemies.m_storage.end(), [](MovingCircle x) {return x.GetCanRemove(); });
-  m_enemies.m_storage.erase(it, m_enemies.m_storage.end());
+  m_enemies.RemoveUnecessaryMembers();
+  m_projectiles.RemoveUnecessaryMembers();
 
   while (m_enemies.GetSize() < m_score + 1)
   {
     //Create enemies if needed
-    Character enemy(0, m_enemies.GetSize()*State::windowHeight / static_cast<float>(m_score + 1), 40, 100, sf::Color::Red, 10);
+    Character enemy(0, m_enemies.GetSize()*Global::windowHeight / static_cast<float>(m_score + 1), 40, 100, sf::Color::Red, 10);
     enemy.SetSpeed(120.0f);
     enemy.SetAlignment(MovingCircle::Alignment::BAD);
     m_enemies.Add(enemy);
@@ -73,9 +73,9 @@ void Game::DoGameLogic(float elapsedTime)
 }
 
 Game::Game() :
-  m_window(VideoMode(State::windowWidth, State::windowHeight), "Pong"),
+  m_window(VideoMode(Global::windowWidth, Global::windowHeight), "Pong"),
   m_score(0),
-  m_player(State::windowWidth / 2.0f, State::windowHeight / 2.0f, 20, 50, sf::Color::Cyan, 0),
+  m_player(Global::windowWidth / 2.0f, Global::windowHeight / 2.0f, 20, 50, sf::Color::Cyan, 0),
   m_pause("Game Paused", m_font, 100),
   m_currentState(PLAYING)
 {
@@ -86,7 +86,7 @@ Game::Game() :
   m_hud.setFillColor(Color::Red);
   FloatRect pauseRect = m_pause.getLocalBounds();
   m_pause.setOrigin(pauseRect.width / 2, pauseRect.height / 2);
-  m_pause.setPosition(State::windowWidth / 2.0f, State::windowHeight / 2.0f);
+  m_pause.setPosition(Global::windowWidth / 2.0f, Global::windowHeight / 2.0f);
 }
 
 void Game::DoLoop()
