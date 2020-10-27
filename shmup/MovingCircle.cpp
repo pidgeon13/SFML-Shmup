@@ -48,7 +48,7 @@ void MovingCircle::SetSpeed(float speed)
   m_speed = speed;
 }
 
-void MovingCircle::SetDirection(const sf::Vector2f& directionIn)
+void MovingCircle::SetDirection(sf::Vector2f directionIn)
 {
   m_direction = directionIn;
   Geometry::Normalise(m_direction);
@@ -57,6 +57,11 @@ void MovingCircle::SetDirection(const sf::Vector2f& directionIn)
 void MovingCircle::SetAlignment(Alignment alignment)
 {
   m_alignment = alignment;
+}
+
+void MovingCircle::SetPosition(sf::Vector2f position)
+{
+  m_position = position;
 }
 
 MovingCircle::Alignment MovingCircle::GetAlignment() const

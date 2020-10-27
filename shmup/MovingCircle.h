@@ -19,8 +19,9 @@ public:
   sf::Vector2f GetPosition() const;
   void SetColor(const sf::Color& color);
   void SetSpeed(float speed);
-  void SetDirection(const sf::Vector2f& directionIn);
+  void SetDirection(sf::Vector2f directionIn);
   void SetAlignment(Alignment alignment);
+  void SetPosition(sf::Vector2f position);
   Alignment GetAlignment() const;
   void Move(float time);
   void Draw(sf::RenderWindow& window) const;

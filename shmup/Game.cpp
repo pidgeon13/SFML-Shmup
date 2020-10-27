@@ -2,30 +2,68 @@
 #include <sstream>
 #include <algorithm>
 #include <set>
+#include "Format.h"
 
 using namespace sf;
+
+Game::Game() :
+  m_window(VideoMode(Global::windowWidth, Global::windowHeight), "Pong"),
+  m_score(0),
+  m_player(Global::windowWidth / 2.0f, Global::windowHeight / 2.0f, 20, 50, sf::Color::Cyan, 0),
+  m_pauseText("Game Paused", m_font, 100),
+  m_deadText("You died", m_font, 100),
+  m_restartText("Press enter to restart", m_font, 40),
+  m_currentState(PLAYING)
+{
+  m_player.SetGracePeriod(0.5f);
+  m_font.loadFromFile("DS-DIGIT.ttf");
+  m_scoreText.setFont(m_font);
+  m_scoreText.setCharacterSize(60);
+  m_scoreText.setFillColor(Color::Red);
+  Format::CenterText(m_pauseText, Global::windowWidth / 2.0f, Global::windowHeight / 2.0f);
+  Format::CenterText(m_deadText, Global::windowWidth / 2.0f, 1 * Global::windowHeight / 3.0f);
+  Format::CenterText(m_restartText, Global::windowWidth / 2.0f, 2 * Global::windowHeight / 3.0f);
+}
+
+void Game::RestartGame()
+{
+  m_score = 0;
+  m_player.SetPosition(sf::Vector2f(Global::windowWidth / 2.0f, Global::windowHeight / 2.0f));
+  m_player.Reset();
+  m_enemies.m_storage.clear();
+  m_projectiles.m_storage.clear();
+  m_currentState = PLAYING;
+}
+
 
 void Game::Draw()
 {
   //Update the HUD text
   std::stringstream ss;
   ss << "Score:" << m_score << "    Health:" << m_player.GetHealth();
-  m_hud.setString(ss.str());
+  m_scoreText.setString(ss.str());
 
   //Draw
   m_window.clear(Color(0, 0, 50, 255));
 
-  m_player.Draw(m_window);
-  m_enemies.DrawAll(m_window);
-  m_projectiles.DrawAll(m_window);
-
-  if (m_currentState == PAUSED)
+  switch (m_currentState)
   {
-    m_window.draw(m_pause);
+  case PLAYING:
+    m_player.Draw(m_window);
+    m_enemies.DrawAll(m_window);
+    m_projectiles.DrawAll(m_window);
+    break;
+  case PAUSED:
+    m_window.draw(m_pauseText);
+    break;
+  case DEAD:
+    m_window.draw(m_deadText);
+    m_window.draw(m_restartText);
+    break;
   }
 
   // Draw our score
-  m_window.draw(m_hud);
+  m_window.draw(m_scoreText);
 
   // Show everything we just drew
   m_window.display();
@@ -49,6 +87,10 @@ void Game::DoGameLogic(float elapsedTime)
 
   //Collisions
   m_enemies.Hits(m_player, false);
+  if (m_player.GetHealth() == 0)
+  {
+    m_currentState = DEAD;
+  }
   for (auto itr = m_enemies.m_storage.begin(); itr != m_enemies.m_storage.end(); ++itr)
   {
     Character& enemy = *itr;
@@ -70,23 +112,6 @@ void Game::DoGameLogic(float elapsedTime)
     enemy.SetAlignment(MovingCircle::Alignment::BAD);
     m_enemies.Add(enemy);
   }
-}
-
-Game::Game() :
-  m_window(VideoMode(Global::windowWidth, Global::windowHeight), "Pong"),
-  m_score(0),
-  m_player(Global::windowWidth / 2.0f, Global::windowHeight / 2.0f, 20, 50, sf::Color::Cyan, 0),
-  m_pause("Game Paused", m_font, 100),
-  m_currentState(PLAYING)
-{
-  m_player.SetGracePeriod(0.5f);
-  m_font.loadFromFile("DS-DIGIT.ttf");
-  m_hud.setFont(m_font);
-  m_hud.setCharacterSize(60);
-  m_hud.setFillColor(Color::Red);
-  FloatRect pauseRect = m_pause.getLocalBounds();
-  m_pause.setOrigin(pauseRect.width / 2, pauseRect.height / 2);
-  m_pause.setPosition(Global::windowWidth / 2.0f, Global::windowHeight / 2.0f);
 }
 
 void Game::DoLoop()
@@ -118,6 +143,10 @@ void Game::DoLoop()
             //Do nothing
             break;
           }
+        }
+        else if (m_currentState == DEAD && event.key.code == sf::Keyboard::Enter)
+        {
+          RestartGame();
         }
       }
     }

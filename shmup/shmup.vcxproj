@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Format.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="Inputs.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="Global.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Format.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="Inputs.h" />

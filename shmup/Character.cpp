@@ -131,6 +131,12 @@ bool Character::TakeDamage(int damage)
   return m_health > 0;
 }
 
+void Character::Reset()
+{
+  m_health = m_maxHealth;
+  UpdateColor();
+}
+
 void Character::UpdateColor()
 {
   float fraction = m_health / static_cast<float>(m_maxHealth);

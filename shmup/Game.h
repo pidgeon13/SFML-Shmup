@@ -22,15 +22,18 @@ class Game
   ListContainer<MovingCircle> m_projectiles;
 
   sf::Clock m_clock;
-  sf::Text m_hud;
+  sf::Text m_scoreText;
   sf::Font m_font;
-  sf::Text m_pause;
+  sf::Text m_pauseText;
+  sf::Text m_deadText;
+  sf::Text m_restartText;
   sf::RenderWindow m_window;
 
   KeyboardInputs m_previousInputs;
 
   void Draw();
   void DoGameLogic(float elapsedTime);
+  void RestartGame();
 
 public:
   Game();

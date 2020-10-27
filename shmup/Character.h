@@ -24,5 +24,6 @@ public:
   int GetHealth() const;
   void SetGracePeriod(float gracePeriod);
   bool TakeDamage(int damage);
+  void Reset();
   void UpdateColor();
 };
