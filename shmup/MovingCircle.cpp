@@ -99,6 +99,18 @@ void MovingCircle::Move(float time)
   Update();
 }
 
+void MovingCircle::MoveAwayFrom(const MovingCircle& other)
+{
+  sf::Vector2f otherPos = other.GetPosition();
+  sf::Vector2f directionToMove = m_position - otherPos;
+  Geometry::Normalise(directionToMove);
+
+  float radius = m_shape.getRadius();
+  float otherRadius = other.GetShape().getRadius();
+  m_position = otherPos + (radius + otherRadius)*directionToMove;
+  Update();
+}
+
 void MovingCircle::Draw(sf::RenderWindow& window) const
 {
   window.draw(m_shape);

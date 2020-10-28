@@ -24,6 +24,7 @@ public:
   void SetPosition(sf::Vector2f position);
   Alignment GetAlignment() const;
   void Move(float time);
+  void MoveAwayFrom(const MovingCircle& other);
   void Draw(sf::RenderWindow& window) const;
   void SetCanRemove(bool canRemove);
   bool GetCanRemove() const;

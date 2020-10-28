@@ -53,6 +53,11 @@ inline bool ListContainer<T>::Hits(Character& character, bool removeThoseHit)
       {
         movingCircle.SetCanRemove(true);
       }
+      else
+      {
+        //Move it away
+        movingCircle.MoveAwayFrom(character);
+      }
     }
   }
   if (someHits && removeThoseHit)
