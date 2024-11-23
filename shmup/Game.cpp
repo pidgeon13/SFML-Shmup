@@ -7,9 +7,9 @@
 using namespace sf;
 
 Game::Game() :
-  m_window(VideoMode(Global::windowWidth, Global::windowHeight), "Pong"),
+  m_window(VideoMode(Dimensions::windowWidth, Dimensions::windowHeight), "Pong"),
   m_score(0),
-  m_player(Global::windowWidth / 2.0f, Global::windowHeight / 2.0f, 20, 50, sf::Color::Cyan, 0),
+  m_player(Dimensions::windowWidth / 2.0f, Dimensions::windowHeight / 2.0f, 20, 50, sf::Color::Cyan, 0),
   m_pauseText("Game Paused", m_font, 100),
   m_deadText("You died", m_font, 100),
   m_restartText("Press enter to restart", m_font, 40),
@@ -20,15 +20,15 @@ Game::Game() :
   m_scoreText.setFont(m_font);
   m_scoreText.setCharacterSize(60);
   m_scoreText.setFillColor(Color::Red);
-  Format::CenterText(m_pauseText, Global::windowWidth / 2.0f, Global::windowHeight / 2.0f);
-  Format::CenterText(m_deadText, Global::windowWidth / 2.0f, 1 * Global::windowHeight / 3.0f);
-  Format::CenterText(m_restartText, Global::windowWidth / 2.0f, 2 * Global::windowHeight / 3.0f);
+  Format::CenterText(m_pauseText, Dimensions::windowWidth / 2.0f, Dimensions::windowHeight / 2.0f);
+  Format::CenterText(m_deadText, Dimensions::windowWidth / 2.0f, 1 * Dimensions::windowHeight / 3.0f);
+  Format::CenterText(m_restartText, Dimensions::windowWidth / 2.0f, 2 * Dimensions::windowHeight / 3.0f);
 }
 
 void Game::RestartGame()
 {
   m_score = 0;
-  m_player.SetPosition(sf::Vector2f(Global::windowWidth / 2.0f, Global::windowHeight / 2.0f));
+  m_player.SetPosition(sf::Vector2f(Dimensions::windowWidth / 2.0f, Dimensions::windowHeight / 2.0f));
   m_player.Reset();
   m_enemies.m_storage.clear();
   m_projectiles.m_storage.clear();
@@ -107,7 +107,7 @@ void Game::DoGameLogic(float elapsedTime)
   while (m_enemies.GetSize() < m_score + 1)
   {
     //Create enemies if needed
-    Character enemy(0, m_enemies.GetSize()*Global::windowHeight / static_cast<float>(m_score + 1), 40, 100, sf::Color::Red, 10);
+    Character enemy(0, m_enemies.GetSize()*Dimensions::windowHeight / static_cast<float>(m_score + 1), 40, 100, sf::Color::Red, 10);
     enemy.SetSpeed(120.0f);
     enemy.SetAlignment(MovingCircle::Alignment::BAD);
     m_enemies.Add(enemy);

@@ -86,7 +86,6 @@
     <ClCompile Include="MovingCircle.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Global.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Format.h" />

@@ -16,7 +16,7 @@ bool Geometry::Normalise(sf::Vector2f& vecIn)
 
 float Geometry::Length2(const sf::Vector2f & vecIn)
 {
-  return std::pow(vecIn.x, 2) + std::pow(vecIn.y, 2);
+  return std::pow(vecIn.x, 2.0f) + std::pow(vecIn.y, 2.0f);
 }
 
 bool Geometry::IsZero(const sf::Vector2f & vecIn, float epsilon)

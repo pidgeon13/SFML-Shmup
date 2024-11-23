@@ -75,8 +75,8 @@ void MovingCircle::Move(float time)
     || Geometry::IsEqual(Geometry::Length2(m_direction), 0));
   float newX = m_position.x + m_direction.x * m_speed * time;
   float newY = m_position.y + m_direction.y * m_speed * time;
-  float maxX = Global::windowWidth - m_shape.getRadius();
-  float maxY = Global::windowHeight - m_shape.getRadius();
+  float maxX = Dimensions::windowWidth - m_shape.getRadius();
+  float maxY = Dimensions::windowHeight - m_shape.getRadius();
   float minX = m_shape.getRadius();
   float minY = m_shape.getRadius();
   if (newX < minX

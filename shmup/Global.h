@@ -1,8 +1,7 @@
 #pragma once
-class Global
+namespace Dimensions
 {
-public:
-  const static int windowWidth;
-  const static int windowHeight;
+  constexpr int windowWidth = 1024;
+  constexpr int windowHeight = 768;
 };
 
