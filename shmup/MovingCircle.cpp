@@ -3,9 +3,9 @@
 #include <assert.h>
 #include "Global.h"
 
-MovingCircle::MovingCircle()
+MovingCircle::MovingCircle() : MovingCircle(0.0f, 0.0f, 5.0f, 10.0f, 0.0f, 0.0f, 0)
 {
-  MovingCircle(0.0f, 0.0f, 5.0f, 10.0f, 0.0f, 0.0f, 0);
+ 
 }
 
 MovingCircle::MovingCircle(float xPos, float yPos, float radius, float speed, float xComponent, float yComponent,int damage) :
