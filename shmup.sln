@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shmup", "shmup\shmup.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "Tests\Tests.vcxproj", "{C85B2B4F-C151-40F9-8CFC-6B9AE46E9588}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineLib", "EngineLib\EngineLib.vcxproj", "{B7E32B3E-3342-4A50-A078-7245A5652A66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -21,6 +23,10 @@ Global
 		{C85B2B4F-C151-40F9-8CFC-6B9AE46E9588}.Debug|x86.Build.0 = Debug|Win32
 		{C85B2B4F-C151-40F9-8CFC-6B9AE46E9588}.Release|x86.ActiveCfg = Release|Win32
 		{C85B2B4F-C151-40F9-8CFC-6B9AE46E9588}.Release|x86.Build.0 = Release|Win32
+		{B7E32B3E-3342-4A50-A078-7245A5652A66}.Debug|x86.ActiveCfg = Debug|Win32
+		{B7E32B3E-3342-4A50-A078-7245A5652A66}.Debug|x86.Build.0 = Debug|Win32
+		{B7E32B3E-3342-4A50-A078-7245A5652A66}.Release|x86.ActiveCfg = Release|Win32
+		{B7E32B3E-3342-4A50-A078-7245A5652A66}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

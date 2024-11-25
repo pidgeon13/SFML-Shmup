@@ -79,27 +79,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Format.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Geometry.cpp" />
-    <ClCompile Include="Inputs.cpp" />
-    <ClCompile Include="MovingCircle.cpp" />
-    <ClCompile Include="Character.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Format.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Geometry.h" />
-    <ClInclude Include="Inputs.h" />
-    <ClInclude Include="ListContainer.h" />
-    <ClInclude Include="ListContainer.hpp" />
-    <ClInclude Include="MovingCircle.h" />
-    <ClInclude Include="Character.h" />
-    <ClInclude Include="Global.h" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="README.md" />
+    <ProjectReference Include="..\EngineLib\EngineLib.vcxproj">
+      <Project>{b7e32b3e-3342-4a50-a078-7245a5652a66}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
